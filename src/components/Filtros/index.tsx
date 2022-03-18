@@ -7,10 +7,9 @@ export default function Filtros() {
    const baseUrl = 'https://restcountries.com/v2/all';
 
    const [loading, setLoading] = useState<boolean>(true);
-   const [nomes, setNomes] = useState<string[]>([]);
-   const [moedas, setMoedas] = useState<any>();
-   const [idiomas, setIdiomas] = useState<string[]>([]);
-
+   const [nomes, setNomes] = useState<any[]>([]);
+   const [moedas, setMoedas] = useState<any[]>([]);
+   const [idiomas, setIdiomas] = useState<any[]>([]);
 
    useEffect(() => {
       carregaItens();
@@ -19,28 +18,38 @@ export default function Filtros() {
    const carregaItens = async () => {
       let resposta = (await axios.get(baseUrl)).data;
 
-      let nomes: string[] = [];
-      let objmoedas: any = [];
-      let moedas: any = [];
-      let idiomas = [];
+      let nomes: any[] = [];
+      let moedas: any[] = [];
+      let idiomas: any[] = [];
 
       resposta.forEach((element: any) => {
-         nomes.push(element.name);
+         nomes.push(element);
       });
 
       resposta.forEach((element: any) => {
-         objmoedas.push(element.currencies);
+         if (element.currencies) {
+            moedas.push(element.currencies[0])
+         }
       });
 
-      for (let i = 0; i < objmoedas.length; i++) {
-         moedas.push(objmoedas[i]);
-      }
+      resposta.forEach((element: any) => {
+         if (element.languages) {
+            if (element.languages.length > 0) {
+               element.languages.forEach((language: any) => {
+                  idiomas.push(language);
+               })
+            }
+         }
+      });
+
 
       console.log('Nomes: ', nomes);
       console.log('Moedas: ', moedas);
+      console.log("Linguas: ", idiomas);
 
       setNomes(nomes);
       setMoedas(moedas);
+      setIdiomas(idiomas);
       setLoading(false);
    }
 
@@ -54,11 +63,28 @@ export default function Filtros() {
                   <p>Nome País</p>
                   <select>
                      {nomes.map((item, index) => (
-                        <option key={index}>{item}</option>
+                        <option key={index}>{item.name}</option>
                      ))}
                   </select>
                </div>
 
+               <div className='filtro'>
+                  <p>Moedas</p>
+                  <select>
+                     {moedas.map((item, index) => (
+                        <option key={index} value={item.code}>{item.symbol} - {item.name}</option>
+                     ))}
+                  </select>
+               </div>
+
+               <div className='filtro'>
+                  <p>Moedas</p>
+                  <select>
+                     {idiomas.map((item, index) => (
+                        <option key={index} value={item.iso639_1}>{item.name}</option>
+                     ))}
+                  </select>
+               </div>
 
             </div>
          }
