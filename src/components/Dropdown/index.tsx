@@ -8,7 +8,7 @@ type Props = {
 export default function Dropdown({ lista, tipo }: Props) {
   return (
     <select>
-      {lista.map((item, index) => (
+      {lista?.map((item, index) => (
         <option key={index} value={tipo ? item.iso639_1 : item.code}>
           {tipo ? item.name : `${item.symbol} - ${item.name}`}
         </option>

@@ -5,18 +5,64 @@ import Tabela from "./components/Tabela";
 
 export default function App() {
   const url = "https://restcountries.com/v2/all";
-
   const [loading, setLoading] = useState<boolean>(true);
   const [pais, setPais] = useState<any[]>([]);
   const [nomes, setNomes] = useState<any[]>([]);
   const [moedas, setMoedas] = useState<any[]>([]);
   const [idiomas, setIdiomas] = useState<any[]>([]);
+  const [total, setTotal] = useState<number>(0);
 
   useEffect(() => {
     carregaItens();
   }, []);
 
+  const carregaPorPais = async (event: any) => {
+    let nomePais = event.target.value;
+
+    if (nomePais) {
+      let resposta = (
+        await axios.get(`https://restcountries.com/v2/name/${nomePais}`)
+      ).data;
+
+      setPais(resposta);
+      setTotal(resposta.length);
+    } else {
+      carregaItens();
+    }
+  };
+
+  const carregaPorMoeda = async (event: any) => {
+    let nomeMoeda = event.target.value;
+
+    if (nomeMoeda) {
+      let resposta = (
+        await axios.get(`https://restcountries.com/v2/currency/${nomeMoeda}`)
+      ).data;
+
+      setPais(resposta);
+      setTotal(resposta.length);
+    } else {
+      carregaItens();
+    }
+  };
+
+  const carregaPorIdioma = async (event: any) => {
+    let nomeIdioma = event.target.value;
+
+    if (nomeIdioma) {
+      let resposta = (
+        await axios.get(`https://restcountries.com/v2/lang/${nomeIdioma}`)
+      ).data;
+
+      setPais(resposta);
+      setTotal(resposta.length);
+    } else {
+      carregaItens();
+    }
+  };
+
   const carregaItens = async () => {
+    setLoading(true);
     let resposta = (await axios.get(url)).data;
 
     let nomes: any[] = [];
@@ -25,15 +71,11 @@ export default function App() {
 
     resposta.forEach((element: any) => {
       nomes.push(element);
-    });
 
-    resposta.forEach((element: any) => {
       if (element.currencies) {
         moedas.push(element.currencies[0]);
       }
-    });
 
-    resposta.forEach((element: any) => {
       if (element.languages) {
         if (element.languages.length > 0) {
           element.languages.forEach((language: string) => {
@@ -52,13 +94,28 @@ export default function App() {
     setMoedas(moedas);
     setIdiomas(idiomas);
     setPais(resposta);
+    setTotal(resposta.length);
     setLoading(false);
   };
 
   return (
     <>
-      {loading && <h1 className="loading">Buscando dados da api...</h1>}
-      {!loading && <Filtros idiomas={idiomas} moedas={moedas} nomes={nomes} />}
+      {loading && (
+        <div className="loading_wrapper">
+          <div className="loading"></div>
+        </div>
+      )}
+      {!loading && (
+        <Filtros
+          idiomas={idiomas}
+          moedas={moedas}
+          nomes={nomes}
+          carregaPorPais={carregaPorPais}
+          carregaPorMoeda={carregaPorMoeda}
+          carregaPorIdioma={carregaPorIdioma}
+          total={total}
+        />
+      )}
       {!loading && <Tabela pais={pais} />}
     </>
   );

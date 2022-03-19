@@ -21,14 +21,13 @@ export default function Tabela({ pais }: Props) {
         <tbody>
           {pais.map((item, index) => (
             <tr key={index}>
-              <td>{item.name}</td>
+              <td>{item.translations.br}</td>
               <td>{item.capital}</td>
               <td>
                 <Dropdown lista={item.languages} tipo={true} />
               </td>
               <td>
-                <Dropdown lista={item.currencies} tipo={false} /> //TODO
-                verificar a lista está vindo nulo
+                <Dropdown lista={item.currencies} tipo={false} />
               </td>
               <td>
                 <img src={item.flag} className="bandeira" />
