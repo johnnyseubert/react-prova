@@ -1,24 +1,36 @@
-.filtros{
-   margin: 20px auto;
-   width: 90%;
-   padding: 10px;
-   background-color: #F5F5F5;
-   border-radius: 8px;
-   box-shadow: 0px 0px 3px black;
-   display: flex;
-   align-items: center;
-   justify-content: center;
+.filtros {
+  margin: 20px auto;
+  margin-bottom: 20px;
+  width: 90%;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0px 0px 3px black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.filtro{
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   flex-direction: column;
-   margin: 10px;
+.filtro {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: 10px;
 }
 
-.filtro select{
-   width: 150px;
-   padding: 5px 16px;
+.filtro select {
+  margin-top: 10px;
+  padding: 5px 16px;
+  width: 200px;
+  background-color: #ccc;
+  border: 0;
+  border-radius: 8px;
+  box-shadow: 0px 0px 5px black;
+}
+
+@media (max-width: 740px) {
+  .filtros {
+    flex-direction: column;
+  }
 }
